@@ -43,9 +43,16 @@ function generateStudyURL() {
 var generatedURL = generateStudyURL();
 var baseURL = "https://c2pa-ux.netlify.app/" + region + "-0";
 
+// ===== START
+
+surveyFullscreen();
+
 window.addEventListener("load", function() {
   screenSetup();
-  protoFrame.src = window.sessionStorage.getItem("url");
+  let url = window.sessionStorage.getItem("url");
+  if (url) {
+    protoFrame.src = url;
+  }
 }, false);
 
 window.addEventListener("resize", function() {
@@ -65,6 +72,7 @@ window.addEventListener("message", (event) => {
     else if (msgStart === "q-") {
       protoFrame.contentWindow.postMessage({ action: "highlight", id: event.data}, "*");
       splitScreen();
+      console.log("postMessage");
     }
 
     else if (msgStart === "c1") {
