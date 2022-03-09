@@ -66,13 +66,15 @@ window.addEventListener("message", (event) => {
 
     let msgStart = event.data.substring(0, 2);
     if (msgStart === "R_") {
-      protoFrame.contentWindow.postMessage({ action: "setResponseId", id: event.data}, "*");
+      // protoFrame.contentWindow.postMessage({ action: "setResponseId", id: event.data}, "*");
+      // console.log("sent id off");
+      generatedURL = generatedURL + "?responseId=" + event.data;
+      baseURL = baseURL + "?responseId=" + event.data;
     }
 
     else if (msgStart === "q-") {
       protoFrame.contentWindow.postMessage({ action: "highlight", id: event.data}, "*");
       splitScreen();
-      console.log("postMessage");
     }
 
     else if (msgStart === "c1") {
