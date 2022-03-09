@@ -49,7 +49,7 @@ surveyFullscreen();
 
 window.addEventListener("load", function() {
   screenSetup();
-  let url = window.sessionStorage.getItem("url");
+  let url = window.localStorage.getItem("url");
   if (url) {
     protoFrame.src = url;
   }
@@ -79,20 +79,20 @@ window.addEventListener("message", (event) => {
 
     else if (msgStart === "c1") {
       protoFrame.src = baseURL;
-      window.sessionStorage.setItem("url", baseURL);
+      window.localStorage.setItem("url", baseURL);
       splitScreen();
     }
 
     else if (msgStart === "c2") {
       protoFrame.src = generatedURL;
-      window.sessionStorage.setItem("url", generatedURL);
+      window.localStorage.setItem("url", generatedURL);
       splitScreen();
     }
 
     else {
       surveyFullscreen();
       if (event.data === "exit") {
-        window.sessionStorage.clear();
+        window.localStorage.clear();
       }
     }
   }
