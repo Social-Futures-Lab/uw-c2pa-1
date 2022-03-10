@@ -66,10 +66,7 @@ window.addEventListener("message", (event) => {
 
     let msgStart = event.data.substring(0, 2);
     if (msgStart === "R_") {
-      // protoFrame.contentWindow.postMessage({ action: "setResponseId", id: event.data}, "*");
-      // console.log("sent id off");
-      generatedURL = generatedURL + "?responseId=" + event.data;
-      baseURL = baseURL + "?responseId=" + event.data;
+      window.localStorage.setItem("id", event.data);
     }
 
     else if (msgStart === "q-") {
@@ -78,12 +75,14 @@ window.addEventListener("message", (event) => {
     }
 
     else if (msgStart === "c1") {
+      baseURL = baseURL + "?responseId=" + window.localStorage.getItem("id");
       protoFrame.src = baseURL;
       window.localStorage.setItem("url", baseURL);
       splitScreen();
     }
 
     else if (msgStart === "c2") {
+      generatedURL = generatedURL + "?responseId=" + window.localStorage.getItem("id");
       protoFrame.src = generatedURL;
       window.localStorage.setItem("url", generatedURL);
       splitScreen();
