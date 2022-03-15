@@ -1,36 +1,42 @@
 var region = "us";
 var studyIDEnds = ["a-d", "b1-d", "b2-d", "b3-d", "b4-d", "c1-d", "c2-d", "c3-d", "c4-d"];
+const validOrigins =
+  /^https?:\/\/(?:localhost(?:\:\d+)?|uwt.az1.qualtrics.com|(?:\w|\-)+.githubpreview.dev|c2pa-ux.netlify.app)/;
 
 contentDiv = document.getElementById("content");
 surveyDiv = document.getElementById("survey");
 protoFrame = document.getElementById("proto");
 
-function splitScreen() {
-  if (window.innerWidth < 768) {
-    surveyDiv.style.width = "50%";
-    contentDiv.style.display = "block";
-    contentDiv.style.width = "50%";
-  }
-  else {
-    surveyDiv.style.width = "60%";
-    contentDiv.style.display = "block";
-    contentDiv.style.width = "40%";
-  }
-}
-
 function surveyFullscreen() {
   surveyDiv.style.width = "100%";
   contentDiv.style.display = "none";
+  surveyDiv.style.height = "100vh";
 }
 
 function screenSetup() {
-  let overlay = document.getElementById('overlay');
-  if (window.innerWidth < window.innerHeight) {
-    overlay.style.display = "block";
+  if (window.innerWidth < window.innerHeight && contentDiv.style.display !== "none") {
+    surveyDiv.style.height = "50vh";
+    contentDiv.style.height = "50vh";
+    surveyDiv.style.width = "100%";
+    contentDiv.style.width = "100%";
   }
   else {
-    overlay.style.display = "none";
+    surveyDiv.style.height = "100vh";
+    contentDiv.style.height = "100vh";
+    if (contentDiv.style.display === "none") {
+      surveyFullscreen();
+    }
+    else {
+      surveyDiv.style.width = "50%";
+      contentDiv.style.display = "block";
+      contentDiv.style.width = "50%";
+    }
   }
+}
+
+function splitScreen() {
+  contentDiv.style.display = "block";
+  screenSetup()
 }
 
 function generateStudyURL() {
@@ -46,6 +52,9 @@ var baseURL = "https://c2pa-ux.netlify.app/" + region + "-0";
 // ===== START
 
 surveyFullscreen();
+if (!window.localStorage.getItem("id")) {
+  protoFrame.src = "https://c2pa-ux.netlify.app/test-study";
+}
 
 window.addEventListener("load", function() {
   screenSetup();
@@ -61,12 +70,21 @@ window.addEventListener("resize", function() {
 
 
 window.addEventListener("message", (event) => {
-  if (event.origin === "https://uwt.az1.qualtrics.com") {
+  if (validOrigins.test(event.origin) && typeof event.data === "string") {
     console.log("received: " + event.data);
+    console.log(JSON.stringify(event.data));
+    console.log(protoFrame.src);
 
     let msgStart = event.data.substring(0, 2);
-    if (msgStart === "R_") {
+    if (msgStart === "t-") {
+      overlay.style.display = "block";
+      contentDiv.style.display = "none";
+      surveyDiv.style.display = "none";
+    }
+
+    else if (msgStart === "R_") {
       window.localStorage.setItem("id", event.data);
+      protoFrame.src = "";
     }
 
     else if (msgStart === "q-") {
@@ -78,6 +96,7 @@ window.addEventListener("message", (event) => {
       baseURL = baseURL + "?responseId=" + window.localStorage.getItem("id");
       protoFrame.src = baseURL;
       window.localStorage.setItem("url", baseURL);
+      contentDiv.style.display = "block";
       splitScreen();
     }
 
@@ -85,6 +104,7 @@ window.addEventListener("message", (event) => {
       generatedURL = generatedURL + "?responseId=" + window.localStorage.getItem("id");
       protoFrame.src = generatedURL;
       window.localStorage.setItem("url", generatedURL);
+      contentDiv.style.display = "block";
       splitScreen();
     }
 
