@@ -1,5 +1,5 @@
 var region = "us";
-var studyIDEnds = ["a-d", "b1-d", "b2-d", "b3-d", "b4-d", "c1-d", "c2-d", "c3-d", "c4-d"];
+var studyIDEnds = ["a-d", "b1-d", "b2-d", "b3-d", "b4-d", "c1-d", "c2-d", "c3-d", "c4-d", "a-s", "b1-s", "b2-s", "b3-s", "b4-s", "c1-s", "c2-s", "c3-s", "c4-s"];
 const validOrigins =
   /^https?:\/\/(?:localhost(?:\:\d+)?|uwt.az1.qualtrics.com|(?:\w|\-)+.githubpreview.dev|c2pa-ux.netlify.app)/;
 
@@ -72,8 +72,6 @@ window.addEventListener("resize", function() {
 window.addEventListener("message", (event) => {
   if (validOrigins.test(event.origin) && typeof event.data === "string") {
     console.log("received: " + event.data);
-    console.log(JSON.stringify(event.data));
-    console.log(protoFrame.src);
 
     let msgStart = event.data.substring(0, 2);
     if (msgStart === "t-") {

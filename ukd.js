@@ -1,5 +1,5 @@
 var region = "uk";
-var studyIDEnds = ["a-d", "b1-d", "b2-d", "b3-d", "b4-d", "c1-d", "c2-d", "c3-d", "c4-d"];
+var studyIDEnds = ["a-d", "b1-d", "b2-d", "b3-d", "b4-d", "c1-d", "c2-d", "c3-d", "c4-d", "a-s", "b1-s", "b2-s", "b3-s", "b4-s", "c1-s", "c2-s", "c3-s", "c4-s"];
 const validOrigins =
   /^https?:\/\/(?:localhost(?:\:\d+)?|uwt.az1.qualtrics.com|(?:\w|\-)+.githubpreview.dev|c2pa-ux.netlify.app)/;
 
